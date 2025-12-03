@@ -1,4 +1,5 @@
 import { processVerificationCode, type CodeProcessOptions } from "./utils";
+import * as TOML from "@iarna/toml";
 
 /**
  * SMS 同步服务器配置
@@ -7,18 +8,19 @@ interface Config {
   port: number;
   response: string;
   regex: string;
-  enableNotification: boolean;
-  enableClipboard: boolean;
+  enable_notification: boolean;
+  enable_clipboard: boolean;
 }
 
 /**
- * 加载配置文件
+ * 加载配置文件（TOML 格式）
  */
 async function loadConfig(): Promise<Config> {
-  const configPath = new URL("./config.json", import.meta.url);
+  const configPath = new URL("./config.toml", import.meta.url);
   const configFile = Bun.file(configPath);
-  const config = await configFile.json();
-  return config as Config;
+  const configText = await configFile.text();
+  const config = TOML.parse(configText) as Config;
+  return config;
 }
 
 /**
@@ -26,13 +28,13 @@ async function loadConfig(): Promise<Config> {
  */
 async function startServer() {
   const config = await loadConfig();
-  const { port, response, regex, enableNotification, enableClipboard } = config;
+  const { port, response, regex, enable_notification, enable_clipboard } = config;
 
   // 准备验证码处理选项
   const codeOptions: CodeProcessOptions = {
     regex,
-    enableNotification,
-    enableClipboard,
+    enableNotification: enable_notification,
+    enableClipboard: enable_clipboard,
   };
 
   const server = Bun.listen({
@@ -87,11 +89,11 @@ async function startServer() {
   console.log("╚════════════════════════════════════════════════╝");
   console.log(`🌐 监听地址: 0.0.0.0:${port}`);
   console.log(`📍 本地访问: localhost:${port}`);
-  console.log(`🔧 配置文件: config.json`);
+  console.log(`🔧 配置文件: config.toml`);
   console.log(`\n📋 当前配置:`);
   console.log(`   正则表达式: ${regex}`);
-  console.log(`   剪贴板: ${enableClipboard ? "✅ 启用" : "❌ 禁用"}`);
-  console.log(`   通知: ${enableNotification ? "✅ 启用" : "❌ 禁用"}`);
+  console.log(`   剪贴板: ${enable_clipboard ? "✅ 启用" : "❌ 禁用"}`);
+  console.log(`   通知: ${enable_notification ? "✅ 启用" : "❌ 禁用"}`);
   console.log(`   响应消息: ${response}`);
   console.log(`\n💡 提示: 请在 Android 手机上配置 SmsForwarder`);
   console.log(`   将短信转发到: <电脑IP>:${port}\n`);

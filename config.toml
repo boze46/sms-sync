@@ -1,0 +1,66 @@
+# SMS 同步服务器配置文件
+# 配置说明: https://github.com/toml-lang/toml
+
+# ==================== 服务器配置 ====================
+
+# Socket 服务器监听端口
+# 范围: 1024-65535
+# 默认: 46000
+port = 46000
+
+# 发送给 SmsForwarder 的响应消息（必须非空）
+# 默认: "success"
+response = "success"
+
+
+# ==================== 验证码提取配置 ====================
+
+# 正则表达式（用于提取验证码）
+# 注意: 使用单引号 '' 可以避免转义，双引号 "" 需要转义
+#
+# 常用示例:
+#   '\d{4,}'           - 4位以上数字（默认）
+#   '\d{6}'            - 恰好6位数字
+#   '\d{4,8}'          - 4-8位数字
+#   '[A-Za-z0-9]{6,}'  - 6位以上字母+数字
+#   '(?<=验证码[:：])\d+' - 提取"验证码："后的数字
+#
+regex = '\d{4,}'
+
+
+# ==================== 功能开关 ====================
+
+# 是否显示系统通知
+# true  = 提取到验证码后显示系统托盘通知
+# false = 不显示通知（安静模式）
+enable_notification = true
+
+# 是否自动复制到剪贴板
+# true  = 提取到验证码后自动复制到剪贴板
+# false = 不复制（需要手动输入验证码）
+enable_clipboard = true
+
+
+# ==================== 使用场景示例 ====================
+#
+# 场景 1: 日常使用（推荐）
+#   enable_notification = true
+#   enable_clipboard = true
+#
+# 场景 2: 工作时间（安静模式）
+#   enable_notification = false
+#   enable_clipboard = true
+#
+# 场景 3: 安全模式（仅提醒）
+#   enable_notification = true
+#   enable_clipboard = false
+#
+# 场景 4: 测试调试（静默模式）
+#   enable_notification = false
+#   enable_clipboard = false
+#
+# ==================== 更多配置 ====================
+#
+# 如需更多配置选项，请参考:
+#   - CONFIG_EXAMPLES.md - 配置示例文档
+#   - README.md - 项目说明文档

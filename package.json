@@ -16,6 +16,7 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@iarna/toml": "^2.2.5",
     "clipboardy": "^5.0.1",
     "node-notifier": "^10.0.1"
   }

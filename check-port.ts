@@ -5,6 +5,7 @@
 
 import { execSync } from "child_process";
 import os from "os";
+import * as TOML from "@iarna/toml";
 
 interface Config {
   port: number;
@@ -12,13 +13,14 @@ interface Config {
 }
 
 /**
- * 加载配置文件
+ * 加载配置文件（TOML 格式）
  */
 async function loadConfig(): Promise<Config> {
-  const configPath = new URL("./config.json", import.meta.url);
+  const configPath = new URL("./config.toml", import.meta.url);
   const configFile = Bun.file(configPath);
-  const config = await configFile.json();
-  return config as Config;
+  const configText = await configFile.text();
+  const config = TOML.parse(configText) as Config;
+  return config;
 }
 
 /**
