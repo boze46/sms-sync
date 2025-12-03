@@ -1,4 +1,4 @@
-import { copyVerificationCode } from "./utils";
+import { processVerificationCode, type CodeProcessOptions } from "./utils";
 
 /**
  * SMS 同步服务器配置
@@ -6,6 +6,9 @@ import { copyVerificationCode } from "./utils";
 interface Config {
   port: number;
   response: string;
+  regex: string;
+  enableNotification: boolean;
+  enableClipboard: boolean;
 }
 
 /**
@@ -23,7 +26,14 @@ async function loadConfig(): Promise<Config> {
  */
 async function startServer() {
   const config = await loadConfig();
-  const { port, response } = config;
+  const { port, response, regex, enableNotification, enableClipboard } = config;
+
+  // 准备验证码处理选项
+  const codeOptions: CodeProcessOptions = {
+    regex,
+    enableNotification,
+    enableClipboard,
+  };
 
   const server = Bun.listen({
     hostname: "0.0.0.0",
@@ -38,14 +48,16 @@ async function startServer() {
         console.log(`📨 接收数据: ${text}`);
 
         // 处理验证码：提取、复制、通知
-        copyVerificationCode(text)
+        processVerificationCode(text, codeOptions)
           .then((code) => {
             if (code) {
-              console.log(`🎯 验证码: ${code}\n`);
+              console.log(`✨ 处理完成\n`);
+            } else {
+              console.log(`⚠️  未提取到验证码\n`);
             }
           })
           .catch((err) => {
-            console.error(`❌ 处理验证码失败: ${err}`);
+            console.error(`❌ 处理验证码失败: ${err}\n`);
           });
 
         // 发送响应给 SmsForwarder
@@ -76,6 +88,11 @@ async function startServer() {
   console.log(`🌐 监听地址: 0.0.0.0:${port}`);
   console.log(`📍 本地访问: localhost:${port}`);
   console.log(`🔧 配置文件: config.json`);
+  console.log(`\n📋 当前配置:`);
+  console.log(`   正则表达式: ${regex}`);
+  console.log(`   剪贴板: ${enableClipboard ? "✅ 启用" : "❌ 禁用"}`);
+  console.log(`   通知: ${enableNotification ? "✅ 启用" : "❌ 禁用"}`);
+  console.log(`   响应消息: ${response}`);
   console.log(`\n💡 提示: 请在 Android 手机上配置 SmsForwarder`);
   console.log(`   将短信转发到: <电脑IP>:${port}\n`);
   console.log("⏳ 等待接收短信验证码...\n");

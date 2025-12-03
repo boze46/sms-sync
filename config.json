@@ -1,4 +1,7 @@
 {
   "port": 46000,
-  "response": "success"
+  "response": "success",
+  "regex": "\\d{4,}",
+  "enableNotification": true,
+  "enableClipboard": true
 }
