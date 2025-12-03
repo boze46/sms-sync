@@ -1,0 +1,16 @@
+{
+  "name": "sms-sync",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "clipboardy": "^5.0.1",
+    "node-notifier": "^10.0.1"
+  }
+}
