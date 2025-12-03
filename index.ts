@@ -5,6 +5,7 @@ import { copyVerificationCode } from "./utils";
  */
 interface Config {
   port: number;
+  response: string;
 }
 
 /**
@@ -22,7 +23,7 @@ async function loadConfig(): Promise<Config> {
  */
 async function startServer() {
   const config = await loadConfig();
-  const { port } = config;
+  const { port, response } = config;
 
   const server = Bun.listen({
     hostname: "0.0.0.0",
@@ -46,6 +47,10 @@ async function startServer() {
           .catch((err) => {
             console.error(`❌ 处理验证码失败: ${err}`);
           });
+
+        // 发送响应给 SmsForwarder
+        socket.write(response);
+        console.log(`📤 发送响应: ${response}`);
 
         // 关闭连接
         socket.end();

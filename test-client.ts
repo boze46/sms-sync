@@ -2,8 +2,8 @@
  * 测试客户端 - 模拟 SmsForwarder 发送验证码
  */
 
-const PORT = 65432;
-const HOST = "localhost";
+const PORT = 46000;
+const HOST = "192.168.2.210";
 
 async function sendTestMessage(message: string) {
   try {
@@ -39,6 +39,8 @@ const testMessages = [
   "{【测试】您的验证码是 123456，请在5分钟内完成验证}",
   "{【银行】您的动态密码为 8888，有效期3分钟}",
   "{验证码：9527，用于登录操作}",
+  "just test",
+  "just other test"
 ];
 
 // 依次发送测试消息
