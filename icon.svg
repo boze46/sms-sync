@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- 背景 -->
+  <rect width="256" height="256" rx="32" fill="#4A90E2"/>
+
+  <!-- 手机形状 -->
+  <rect x="70" y="50" width="116" height="156" rx="12" fill="white"/>
+
+  <!-- 屏幕 -->
+  <rect x="80" y="70" width="96" height="116" rx="4" fill="#E8F4F8"/>
+
+  <!-- 消息图标 -->
+  <path d="M 100 100 L 156 100 L 156 140 L 120 140 L 100 156 Z" fill="#4A90E2"/>
+
+  <!-- 验证码数字 -->
+  <text x="128" y="128" font-family="monospace" font-size="20" font-weight="bold" fill="white" text-anchor="middle">123</text>
+
+  <!-- Home 按钮 -->
+  <circle cx="128" cy="196" r="6" fill="#4A90E2"/>
+</svg>
